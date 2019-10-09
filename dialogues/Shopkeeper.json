@@ -1,7 +1,7 @@
 {
     "stack":[
         {"if": "100 > 50",
-         "then" : {"print": "[{npc_glyph}][color=yellow]{npc_name}:[/color]Hello, I'm Bob. Nice to meet you.| Wanna buy some precious things?"},
+         "then" : {"pre_print": ["[[color={npc_glyph_color}]{npc_glyph}[/color]][color=yellow]{npc_name}:[/color]",["Hello, I'm Bob. Nice to meet you.","Wanna buy some precious things?","!CLR","Oh, nope... so have a nice day."]]},
          "else": {"print": "something is wrong"}}
     ]
 }

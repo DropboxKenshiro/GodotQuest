@@ -18,7 +18,7 @@ export (String) var npc_id # id that is used for searches etc.
 
 export (ActivationType) var activation_type # determines how event is activated
 
-func npc_print(string, player):
+func npc_print(strings, player):
 	# Dictionary used to mark all of the tags
 	# Note that attributes are build each time that
 	# npc_print is called. Data could change, so it
@@ -27,12 +27,16 @@ func npc_print(string, player):
 								"npc_occupation": occupation,
 								"npc_title": title,
 								"npc_glyph": $"Label".text,
+								"npc_glyph_color": '#' + $"Label".get_color("font_color").to_html(false),
 								"player_hp": player.hp}
 	
-	var formatted_string = string.format(attributes_dictionary)
+	var formatted_strings = PoolStringArray()
+	
+	for dialogue_part in strings:
+		formatted_strings.append(dialogue_part.format(attributes_dictionary))
 	
 	player.input_mode = player.INPUT_DIALOGUE
-	dialogue_panel.dialogue_print(formatted_string)
+	dialogue_panel.dialogue_print(formatted_strings)
 
 func npc_event(player):
 	npc_parse(dialogue_script, player)
@@ -45,14 +49,46 @@ func npc_call(instruction, player):
 	var exec = instruction.keys()[0]
 	match exec:
 		"if":
+			# conditional statement
+			# notice that "if","then" and "else" are given as key-value pairs, not as array
 			if(Eval.eval(instruction["if"])):
 				npc_call(instruction["then"],player)
 			else:
 				npc_call(instruction["else"],player)
 		"print":
+			# what function called print can do?
+			# obviously, it prints text onto dialogue textbox
+			# argument is an array of strings, pause in dialogue is inserted after each one
 			npc_print(instruction["print"],player)
 		"pre_print":
-			pass # todo
+			# pre-print works like ordinary print, but adds additional string at the beggining of all strings.
+			# pre_print is smart, it notices "!CLR" and other controls
+			# args are: [pre_string,[strings]]
+			# notice that no spaces are added after pre_string
+			var prepared_strings = PoolStringArray()
+			var clr_flag = false
+			
+			for string in instruction["pre_print"][1]:
+				if(!clr_flag):
+					prepared_strings.append(instruction["pre_print"][0] + string)
+					clr_flag = true
+				elif(string != "!CLR"):
+					prepared_strings.append(string)
+				else:
+					prepared_strings.append(string)
+					clr_flag = false
+					
+				npc_print(prepared_strings, player)
+		"pre_print_raw":
+			# like pre_print, but doesn't care about "!CLR" and such
+			# args are: [pre_string,[strings]]
+			# notice that no spaces are added after pre_string
+			var prepared_strings = PoolStringArray()
+			
+			for string in instruction["pre_print_raw"][1]:
+				prepared_strings.append(instruction["pre_print_raw"][0] + string)
+				npc_print(prepared_strings, player)
+		
 
 func _ready():
 	var dialogue_file = File.new()

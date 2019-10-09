@@ -1,6 +1,6 @@
 extends Panel
 
-var current_dialogue_array = PoolStringArray()
+onready var current_dialogue_array = PoolStringArray()
 var dialogue_index = 0
 
 signal dialogue_end
@@ -8,27 +8,43 @@ signal dialogue_end
 func _ready():
 	pass
 
-# few notes on dialogue splitting
-# | and || are reserved for splitting purposes
-# | stops dialogue and resumes after dialogue_forward
-# || stops dialogue, but after dialogue_forward it clears screen
 func dialogue_print(text):
 	self.show()
 	
-	current_dialogue_array = text.split('|') # note, || will give additional, empty string. It's useful for detecting screen clear.
+	# valid typer for dialogue are
+	# array: by default interpretation of JSON
+	# poolstringarray: given by npc_print()
+	# string: in case of a singular string to print
+	if(typeof(text) == TYPE_ARRAY):
+		current_dialogue_array = PoolStringArray(text)
+	elif(typeof(text) == TYPE_STRING):
+		current_dialogue_array.append(text)
+	elif(typeof(text) == TYPE_STRING_ARRAY):
+		current_dialogue_array = text
+	else:
+		return ERR_INVALID_PARAMETER
+	
 	self.dialogue_index = 0
 	$"Dialogue".bbcode_text = current_dialogue_array[dialogue_index]
 
 func feed_dialogue():
 	dialogue_index += 1
+	
+	# check if we're at the end of array
 	if(dialogue_index == current_dialogue_array.size()):
 		self.hide()
 		$"Dialogue".bbcode_text = ""
 		emit_signal("dialogue_end")
 		return
-	if(current_dialogue_array[dialogue_index] == ''):
-		$"Dialogue".bbcode_text = ""
-		dialogue_index += 1
+	
+	# this match instruction handles special codes
+	# they begin with '!' and do something special
+	match current_dialogue_array[dialogue_index]:
+		"!CLR": # clears screen
+			$"Dialogue".bbcode_text = ""
+			feed_dialogue()
+			return
+			
 	$"Dialogue".bbcode_text += current_dialogue_array[dialogue_index]
 
 func _on_Hero_dialogue_forward():
