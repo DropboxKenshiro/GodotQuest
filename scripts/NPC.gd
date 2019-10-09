@@ -52,7 +52,7 @@ func npc_call(instruction, player):
 		"print":
 			npc_print(instruction["print"],player)
 		"pre_print":
-			
+			pass # todo
 
 func _ready():
 	var dialogue_file = File.new()

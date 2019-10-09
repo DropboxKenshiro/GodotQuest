@@ -12,12 +12,12 @@ _global_script_classes=[ {
 "base": "StaticBody2D",
 "class": "NPC",
 "language": "GDScript",
-"path": "res://NPC.gd"
+"path": "res://scripts/NPC.gd"
 }, {
 "base": "Object",
 "class": "Segment",
 "language": "GDScript",
-"path": "res://Segment.gd"
+"path": "res://scripts/Segment.gd"
 } ]
 _global_script_class_icons={
 "NPC": "",
@@ -27,12 +27,12 @@ _global_script_class_icons={
 [application]
 
 config/name="GodotQuest"
-run/main_scene="res://Node2D.tscn"
+run/main_scene="res://scenes/Node2D.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-Eval="*res://Eval.gd"
+Eval="*res://scripts/Eval.gd"
 
 [display]
 
