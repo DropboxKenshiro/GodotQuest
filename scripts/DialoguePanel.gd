@@ -1,5 +1,8 @@
 extends Panel
 
+onready var choice_label = preload("res://prototypes/Choice.tscn")
+onready var choice_container = $"ChoiceContainer"
+
 onready var current_dialogue_array = PoolStringArray()
 var dialogue_index = 0
 
@@ -46,6 +49,14 @@ func feed_dialogue():
 			return
 			
 	$"Dialogue".bbcode_text += current_dialogue_array[dialogue_index]
+
+func enable_choices(possible: PoolStringArray):
+	choice_container.show()
+	for choice in possible:
+		var new_choice = choice_label.instance()
+		new_choice.name = choice
+		new_choice.text = choice
+		choice_container.add_child(new_choice)
 
 func _on_Hero_dialogue_forward():
 	feed_dialogue()

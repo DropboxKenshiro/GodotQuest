@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://prototypes/chosen_style.tres" type="StyleBox" id=1]
+[ext_resource path="res://fonts/GNU Unifont/Gnu Unifont DynamicFont.tres" type="DynamicFont" id=2]
+
+[node name="Choice" type="Label"]
+margin_left = 236.0
+margin_right = 268.0
+margin_bottom = 16.0
+rect_pivot_offset = Vector2( -351.874, -13.485 )
+size_flags_horizontal = 6
+size_flags_vertical = 0
+custom_styles/normal = ExtResource( 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Deny"
+align = 1
+valign = 1
+

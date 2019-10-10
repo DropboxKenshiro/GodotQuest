@@ -38,6 +38,9 @@ func npc_print(strings, player):
 	player.input_mode = player.INPUT_DIALOGUE
 	dialogue_panel.dialogue_print(formatted_strings)
 
+func choice_print(choices):
+	dialogue_panel.enable_choices(PoolStringArray(choices))
+
 func npc_event(player):
 	npc_parse(dialogue_script, player)
 
@@ -50,11 +53,18 @@ func npc_call(instruction, player):
 	match exec:
 		"if":
 			# conditional statement
+			# if "if" expression is true, "then" is executed, else "else" is executed
 			# notice that "if","then" and "else" are given as key-value pairs, not as array
 			if(Eval.eval(instruction["if"])):
 				npc_call(instruction["then"],player)
 			else:
 				npc_call(instruction["else"],player)
+		"choice":
+			# switch/case like instruction intended for dialogue branches
+			# choice is a block, consisting of:
+			# "choice": [choices] -> array of strings that represent choices. Their names are also printed out in dialogue.
+			# keys of choices in previous key, values are sub-stacks
+			choice_print(instruction["choice"])
 		"print":
 			# what function called print can do?
 			# obviously, it prints text onto dialogue textbox

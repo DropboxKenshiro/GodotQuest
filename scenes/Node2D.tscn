@@ -27,6 +27,7 @@ script = ExtResource( 1 )
 [node name="Shopkeeper" type="StaticBody2D" parent="." groups=[
 "NPC",
 ]]
+editor/display_folded = true
 position = Vector2( 144, 64 )
 z_index = 1
 collision_layer = 2
@@ -212,7 +213,6 @@ align = 1
 valign = 1
 
 [node name="DialoguePanel" type="Panel" parent="MainCamera/UI"]
-visible = false
 margin_left = 4.0
 margin_top = 390.0
 margin_right = 512.0
@@ -228,9 +228,16 @@ custom_fonts/bold_font = ExtResource( 3 )
 custom_fonts/normal_font = ExtResource( 3 )
 custom_constants/line_separation = 0
 bbcode_enabled = true
-bbcode_text = "[b][color=yellow]Bob[/color][/b]: Hello, I'm Bob."
-text = "Bob: Hello, I'm Bob."
 scroll_active = false
+
+[node name="ChoiceContainer" type="HSplitContainer" parent="MainCamera/UI/DialoguePanel"]
+visible = false
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -16.0
+margin_right = -4.0
+dragger_visibility = 1
 
 [connection signal="dialogue_forward" from="Hero" to="MainCamera/UI/DialoguePanel" method="_on_Hero_dialogue_forward"]
 [connection signal="hero_moved" from="Hero" to="MainCamera" method="_on_Hero_hero_moved" binds= [ Vector2( 0, 0 ) ]]

@@ -1,7 +1,12 @@
 {
     "stack":[
-        {"if": "100 > 50",
-         "then" : {"pre_print": ["[[color={npc_glyph_color}]{npc_glyph}[/color]][color=yellow]{npc_name}:[/color]",["Hello, I'm Bob. Nice to meet you.","Wanna buy some precious things?","!CLR","Oh, nope... so have a nice day."]]},
-         "else": {"print": "something is wrong"}}
+        {"print": "What alcohol do you want?"},
+        {"choice": ["Beer","Vodka"],
+        "Beer":[
+            {"print": "BEEER"}
+        ],
+        "Vokda":[
+            {"print": "Suka blyat!"}
+        ]}
     ]
 }
