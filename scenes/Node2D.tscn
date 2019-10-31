@@ -1,25 +1,16 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/GameController.gd" type="Script" id=1]
 [ext_resource path="res://scripts/NPC.gd" type="Script" id=2]
 [ext_resource path="res://Fonts/GNU Unifont/Gnu Unifont DynamicFont.tres" type="DynamicFont" id=3]
-[ext_resource path="res://scripts/Hero.gd" type="Script" id=4]
-[ext_resource path="res://scripts/Main_Camera.gd" type="Script" id=5]
-[ext_resource path="res://scripts/DialoguePanel.gd" type="Script" id=6]
+[ext_resource path="res://fonts/GNU Unifont/Gnu Unifont DynamicFont.tres" type="DynamicFont" id=4]
+[ext_resource path="res://scripts/Hero.gd" type="Script" id=5]
+[ext_resource path="res://scripts/Main_Camera.gd" type="Script" id=6]
+[ext_resource path="res://scripts/DialoguePanel.gd" type="Script" id=7]
 
-[sub_resource type="StyleBoxFlat" id=1]
-content_margin_left = 4.0
-content_margin_right = 4.0
-content_margin_top = 4.0
-content_margin_bottom = 4.0
-bg_color = Color( 0, 0, 0, 1 )
-border_width_left = 4
-border_color = Color( 0.788235, 0.788235, 0.788235, 1 )
+[sub_resource type="StyleBoxEmpty" id=1]
 
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0, 0, 0, 1 )
-border_width_top = 4
-border_width_right = 4
+[sub_resource type="StyleBoxEmpty" id=2]
 
 [node name="GameController" type="Node2D"]
 script = ExtResource( 1 )
@@ -51,10 +42,9 @@ custom_colors/font_color = Color( 0, 0.694118, 1, 1 )
 text = "☺̈"
 
 [node name="Building" type="StaticBody2D" parent="."]
-editor/display_folded = true
 position = Vector2( 128, 48 )
 __meta__ = {
-"_edit_group_": true
+"_edit_lock_": true
 }
 
 [node name="Flooring" type="Label" parent="Building"]
@@ -72,14 +62,14 @@ text = "░░░░░░░░░
 [node name="Label" type="Label" parent="Building"]
 margin_right = 88.0
 margin_bottom = 80.0
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 custom_colors/font_color = Color( 0.313726, 0.160784, 0, 1 )
 custom_constants/line_spacing = 0
 text = "╔═════════╗
 ║         ║
 ║         ║
 ║         ║
-╚─════════╝"
+╚─⍍═══════╝"
 
 [node name="Collider" type="CollisionPolygon2D" parent="Building"]
 visible = false
@@ -151,7 +141,7 @@ editor/display_folded = true
 position = Vector2( 136, 112 )
 z_index = 1
 collision_mask = 0
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 
 [node name="Label" type="Label" parent="Hero"]
 margin_right = 8.0
@@ -181,7 +171,7 @@ drag_margin_left = 0.0
 drag_margin_top = 0.0
 drag_margin_right = 0.0
 drag_margin_bottom = 0.0
-script = ExtResource( 5 )
+script = ExtResource( 6 )
 
 [node name="UI" type="Control" parent="MainCamera"]
 anchor_right = 1.0
@@ -212,13 +202,52 @@ QUEST"
 align = 1
 valign = 1
 
+[node name="Border" type="Label" parent="MainCamera/UI/SidePanel"]
+margin_top = -10.0
+margin_right = 8.0
+margin_bottom = 502.0
+custom_fonts/font = ExtResource( 4 )
+custom_constants/line_spacing = 0
+text = "║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+║
+"
+
 [node name="DialoguePanel" type="Panel" parent="MainCamera/UI"]
 margin_left = 4.0
 margin_top = 390.0
 margin_right = 512.0
 margin_bottom = 480.0
 custom_styles/panel = SubResource( 2 )
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 
 [node name="Dialogue" type="RichTextLabel" parent="MainCamera/UI/DialoguePanel"]
 margin_top = 3.0
@@ -239,6 +268,16 @@ margin_top = -16.0
 margin_right = -4.0
 dragger_visibility = 1
 
-[connection signal="dialogue_forward" from="Hero" to="MainCamera/UI/DialoguePanel" method="_on_Hero_dialogue_forward"]
+[node name="Border" type="Label" parent="MainCamera/UI/DialoguePanel"]
+margin_left = -4.0
+margin_top = -16.0
+margin_right = 508.0
+custom_fonts/font = ExtResource( 4 )
+text = "════════════════════════════════════════════════════════════════"
+align = 1
+valign = 1
+
+[connection signal="choice_change" from="Hero" to="MainCamera/UI/DialoguePanel" method="_on_Hero_choice_change"]
+[connection signal="dialogue_trigger" from="Hero" to="MainCamera/UI/DialoguePanel" method="_on_Hero_dialogue_trigger"]
 [connection signal="hero_moved" from="Hero" to="MainCamera" method="_on_Hero_hero_moved" binds= [ Vector2( 0, 0 ) ]]
 [connection signal="dialogue_end" from="MainCamera/UI/DialoguePanel" to="Hero" method="_on_DialoguePanel_dialogue_end"]

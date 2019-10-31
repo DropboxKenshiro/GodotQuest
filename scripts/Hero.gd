@@ -13,7 +13,8 @@ onready var focus = $"CameraFocus"
 var bit_order = [1,0] # order in which bytes in mask are applied by default. Could be used for defining priority.
 
 signal hero_moved
-signal dialogue_forward
+signal dialogue_trigger
+signal choice_change
 
 var internal_position = Vector2(0,0) setget set_internal_position, get_internal_position # position in game world's scale. Converted to real size automatically
 var position_changed = false # dirty flag to optimize position changing
@@ -50,7 +51,11 @@ func _handle_input():
 					self.position_changed = true
 		INPUT_DIALOGUE:
 			if(Input.is_action_just_pressed("Trigger")):
-				emit_signal("dialogue_forward")
+				emit_signal("dialogue_trigger")
+			elif(Input.is_action_just_pressed("Left")):
+				emit_signal("choice_change",-1)
+			elif(Input.is_action_just_pressed("Right")):
+				emit_signal("choice_change",1)
 
 func check_collision(step_vector, activate_type, bit_table := bit_order):
 	for bit in bit_table:

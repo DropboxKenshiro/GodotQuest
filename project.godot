@@ -33,6 +33,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Eval="*res://scripts/Eval.gd"
+NpcParser="*res://scripts/npc_parser.gd"
 
 [display]
 

@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://prototypes/chosen_style.tres" type="StyleBox" id=1]
+[ext_resource path="res://prototypes/not_chosen_style.tres" type="StyleBox" id=1]
 [ext_resource path="res://fonts/GNU Unifont/Gnu Unifont DynamicFont.tres" type="DynamicFont" id=2]
+[ext_resource path="res://prototypes/Choice.gd" type="Script" id=3]
+[ext_resource path="res://prototypes/chosen_style.tres" type="StyleBox" id=4]
 
 [node name="Choice" type="Label"]
 margin_left = 236.0
@@ -12,8 +14,11 @@ size_flags_horizontal = 6
 size_flags_vertical = 0
 custom_styles/normal = ExtResource( 1 )
 custom_fonts/font = ExtResource( 2 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Deny"
 align = 1
 valign = 1
+script = ExtResource( 3 )
+state_chosen = ExtResource( 4 )
+state_not_chosen = ExtResource( 1 )
+state_not_chosen_color = Color( 1, 1, 1, 1 )
 

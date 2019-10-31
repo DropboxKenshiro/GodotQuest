@@ -1,12 +1,13 @@
 {
     "stack":[
-        {"print": "What alcohol do you want?"},
-        {"choice": ["Beer","Vodka"],
-        "Beer":[
-            {"print": "BEEER"}
-        ],
-        "Vokda":[
-            {"print": "Suka blyat!"}
-        ]}
+		{"print": ["Hey dude!", "!CLR", "What alcohol do you want?"]},
+        {"choice": ["Beer", "Vodka"],
+		"Beer":[
+		{"print": ["!CLR", "Mmm... best choice."]}
+		],
+		"Vodka":[
+		{"print": ["!CLR", "You're Russian?"]}]
+		},
+		{"print": ["This is a failure..."]}
     ]
 }
