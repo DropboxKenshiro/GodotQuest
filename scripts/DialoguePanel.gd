@@ -7,51 +7,67 @@ onready var choice_label = preload("res://prototypes/Choice.tscn")
 onready var choice_container = $"ChoiceContainer"
 
 onready var current_dialogue_array = []
-var dialogue_index = STATE_IDLE
 var choice_index = null # equals null if choice isn't active
 
 var current_npc_reference #reference do npc you're currently talking to.
 
+signal dialogue_begin
+signal choice_begin
 signal dialogue_end
-signal choice_done
+signal choice_end
 
 func _ready():
 	pass
 
-func dialogue_print(text):
+func enable_dialogue():
+	emit_signal("dialogue_begin")
 	dialogue_state = STATE_TALK
 	self.show()
+
+func disable_dialogue():
+	self.hide()
+	$"Dialogue".bbcode_text = ""
+	current_npc_reference = null
+	current_dialogue_array.clear()
+	NpcParser.wait_flag = false
+	emit_signal("dialogue_end")
+
+func dialogue_add(text: Array):
+	var initialized = false
 	
-	current_dialogue_array = text
-	
-	self.dialogue_index = 0
-	$"Dialogue".bbcode_text = current_dialogue_array[0]
+	if(current_dialogue_array.empty()):
+		enable_dialogue()
+		initialized = true
+	for string in text:
+		current_dialogue_array.append(string)
+	if(initialized):
+		feed_dialogue()
 
 func feed_dialogue():
-	dialogue_index += 1
-	
 	# check if we're at the end of array
 	# in other words, clearing after dialogue is done
-	if(dialogue_index == current_dialogue_array.size()):
-		self.hide()
-		$"Dialogue".bbcode_text = ""
-		current_npc_reference = null
-		NpcParser.wait_flag = false # since NpcParser is a singleton, signals not needed here
-		emit_signal("dialogue_end")
+	if(current_dialogue_array.empty()):
+		disable_dialogue()
 		return
 	
 	# this match instruction handles special codes
 	# they begin with '!' and do something special
-	match current_dialogue_array[dialogue_index]:
+	match current_dialogue_array.front():
 		"!CLR": # clears screen
 			$"Dialogue".bbcode_text = ""
-			feed_dialogue()
-			return
-			
-	$"Dialogue".bbcode_text += current_dialogue_array[dialogue_index]
+			current_dialogue_array.pop_front()
+			if(!current_dialogue_array.empty()):
+				continue
+			else:
+				disable_dialogue()
+				return
+		_: # no special code, add text to the textbox
+			$"Dialogue".bbcode_text += current_dialogue_array.pop_front()
 
 func enable_choices(possible):
+	emit_signal("choice_begin")
 	choice_index = 0
+	dialogue_state = STATE_CHOICE
 	
 	choice_container.show()
 	for choice in possible:
@@ -63,6 +79,15 @@ func enable_choices(possible):
 	# selecting first element as a default choice
 	choice_container.get_child(0).set_choice(true)
 
+func disable_choices() -> String:
+	var chosen = choice_container.get_child(choice_index).name
+	
+	for choice in self.choice_container.get_children():
+		choice.queue_free()
+	
+	emit_signal("choice_end")
+	return chosen
+
 func choice_change(direction):
 	choice_container.get_child(self.choice_index).set_choice(false)
 	self.choice_index = int(clamp(self.choice_index + direction,0,self.get_child_count() - 1))
@@ -73,7 +98,7 @@ func _on_Hero_dialogue_trigger():
 		STATE_TALK:
 			feed_dialogue()
 		STATE_CHOICE:
-			pass #tbd
+			disable_choices()
 
 # notice, -1 means left, 1 means right
 func _on_Hero_choice_change(direction):

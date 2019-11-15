@@ -1,13 +1,8 @@
 {
     "stack":[
-		{"print": ["Hey dude!", "!CLR", "What alcohol do you want?"]},
-        {"choice": ["Beer", "Vodka"],
-		"Beer":[
-		{"print": ["!CLR", "Mmm... best choice."]}
-		],
-		"Vodka":[
-		{"print": ["!CLR", "You're Russian?"]}]
-		},
-		{"print": ["This is a failure..."]}
+		{"print": ["Hey dude! ","What do you want?"]},
+		{"if": "Player.hp >= 80",
+		 "then": [{"print": ["Nice! You have {player_hp} HP."]}],
+		 "else": [{"print": ["Something wrong happened... Refer to manual page 452."]}]}
     ]
 }

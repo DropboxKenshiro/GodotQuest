@@ -19,7 +19,7 @@ signal choice_change
 var internal_position = Vector2(0,0) setget set_internal_position, get_internal_position # position in game world's scale. Converted to real size automatically
 var position_changed = false # dirty flag to optimize position changing
 
-enum {INPUT_MOVE, INPUT_DIALOGUE}
+enum {INPUT_MOVE, INPUT_DIALOGUE, INPUT_CHOICE}
 var input_mode = self.INPUT_MOVE
 
 var max_hp = 100
@@ -49,13 +49,14 @@ func _handle_input():
 			if(step_v != Vector2(0,0)):
 				if(step(step_v)):
 					self.position_changed = true
-		INPUT_DIALOGUE:
-			if(Input.is_action_just_pressed("Trigger")):
-				emit_signal("dialogue_trigger")
-			elif(Input.is_action_just_pressed("Left")):
+		INPUT_CHOICE:
+			if(Input.is_action_just_pressed("Left")):
 				emit_signal("choice_change",-1)
 			elif(Input.is_action_just_pressed("Right")):
 				emit_signal("choice_change",1)
+		INPUT_DIALOGUE, INPUT_CHOICE:
+			if(Input.is_action_just_pressed("Trigger")):
+				emit_signal("dialogue_trigger")
 
 func check_collision(step_vector, activate_type, bit_table := bit_order):
 	for bit in bit_table:
@@ -114,4 +115,13 @@ func _process(delta):
 		emit_signal("hero_moved",focus.global_position)
 
 func _on_DialoguePanel_dialogue_end():
+	self.input_mode = INPUT_MOVE
+
+func _on_DialoguePanel_dialogue_begin():
+	self.input_mode = INPUT_DIALOGUE
+
+func _on_DialoguePanel_choice_begin():
+	self.input_mode = INPUT_CHOICE
+
+func _on_DialoguePanel_choice_end():
 	self.input_mode = INPUT_MOVE

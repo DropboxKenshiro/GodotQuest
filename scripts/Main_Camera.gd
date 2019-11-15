@@ -12,11 +12,11 @@ func update_cam(new_position := self.position):
 	self.force_update_scroll()
 
 func _input(event):
-	if(event.is_action_pressed("Zoom Out") and index < zoom_table.size() - 1):
+	if(event.is_action_pressed("Zoom In") and index < zoom_table.size() - 1):
 		index += 1
 		self.zoom = Vector2(self.zoom_table[index],self.zoom_table[index])
 		update_cam()
-	elif(event.is_action_pressed("Zoom In") and index > 0):
+	elif(event.is_action_pressed("Zoom Out") and index > 0):
 		index -= 1
 		self.zoom = Vector2(self.zoom_table[index],self.zoom_table[index])
 		update_cam()
