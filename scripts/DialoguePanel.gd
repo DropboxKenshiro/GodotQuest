@@ -6,6 +6,9 @@ var dialogue_state
 onready var choice_label = preload("res://prototypes/Choice.tscn")
 onready var choice_container = $"ChoiceContainer"
 
+var char_delay = 0.02
+var print_flag = false
+
 onready var current_dialogue_array = []
 var choice_index = null # equals null if choice isn't active
 
@@ -21,6 +24,7 @@ func _ready():
 
 func enable_dialogue():
 	emit_signal("dialogue_begin")
+	$"Dialogue".bbcode_text = ""
 	dialogue_state = STATE_TALK
 	self.show()
 
@@ -29,7 +33,6 @@ func disable_dialogue():
 	$"Dialogue".bbcode_text = ""
 	current_npc_reference = null
 	current_dialogue_array.clear()
-	NpcParser.wait_flag = false
 	emit_signal("dialogue_end")
 
 func dialogue_add(text: Array):
@@ -62,7 +65,12 @@ func feed_dialogue():
 				disable_dialogue()
 				return
 		_: # no special code, add text to the textbox
-			$"Dialogue".bbcode_text += current_dialogue_array.pop_front()
+			# simple method of simulating slighty appearing text like in jRPGs
+			for character in current_dialogue_array.pop_front():
+				print_flag = true
+				yield(get_tree().create_timer(char_delay),"timeout")
+				print_flag = false
+				$"Dialogue".bbcode_text += character
 
 func enable_choices(possible):
 	emit_signal("choice_begin")
@@ -96,7 +104,8 @@ func choice_change(direction):
 func _on_Hero_dialogue_trigger():
 	match dialogue_state:
 		STATE_TALK:
-			feed_dialogue()
+			if(!print_flag):
+				feed_dialogue()
 		STATE_CHOICE:
 			disable_choices()
 
