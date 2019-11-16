@@ -10,6 +10,20 @@ var function_state # function reference for interpreting yields
 
 var dialogue_panel # reference to a dialogue panel
 
+# helper function to build a dictionary of evaluation clauses of a string
+func build_evals(string: String) -> String:
+	var i = 0
+	var j = 0
+	while(i < string.length()):
+		i = string.find('$', j)
+		j = string.find('$', i + 1)
+		if(i == -1 or j == -1):
+			break
+		var sub_str = string.substr(i + 1,j - i - 1) # begin from first char after a $, and get characters between dollars
+		if(sub_str != ""):
+			string = string.replace('$' + sub_str + '$',Eval.eval(sub_str))
+	return string
+
 func string_parse(strings):
 	# Dictionary used to mark all of the tags
 	# Note that attributes are build each time that
@@ -19,11 +33,19 @@ func string_parse(strings):
 								"npc_occupation": npc_reference.occupation,
 								"npc_title": npc_reference.title,
 								"player_hp": player_reference.hp}
+								
+	# another important thing is evaluation clauses
+	# everything between two dollar signs("$_$") will by evaluated by eval() and pasted into string
+	# however, it is strongly recommended to use attributes. Use $$ only if you need something that is not in attributes dictionary
 	
 	var formatted_strings = []
 	
 	for string in strings:
-		formatted_strings.append(string.format(attributes_dictionary))
+		var formatted_str = string.format(attributes_dictionary) # parse any variables
+		# format evaluation clauses...
+		if(formatted_str.find('$') > -1): # but only if sting contains any dollar signs
+			formatted_str = build_evals(formatted_str)
+		formatted_strings.append(formatted_str)
 	formatted_strings.append("!CLR") # clear screen after a print statement
 
 	dialogue_panel.dialogue_add(formatted_strings)
