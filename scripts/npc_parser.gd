@@ -23,8 +23,7 @@ func string_parse(strings):
 	var formatted_strings = []
 	
 	for string in strings:
-		string.format(attributes_dictionary)
-		formatted_strings.append(string)
+		formatted_strings.append(string.format(attributes_dictionary))
 	formatted_strings.append("!CLR") # clear screen after a print statement
 
 	dialogue_panel.dialogue_add(formatted_strings)
