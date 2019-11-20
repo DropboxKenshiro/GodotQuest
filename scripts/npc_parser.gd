@@ -5,6 +5,7 @@ var wait_flag = false # flag that signalizes wait for an input(if any)
 
 var npc_reference
 var player_reference
+var npc_vars
 
 var function_state # function reference for interpreting yields
 
@@ -24,7 +25,7 @@ func build_evals(string: String) -> String:
 			string = string.replace('$' + sub_str + '$',Eval.eval(sub_str))
 	return string
 
-func string_parse(strings):
+func string_parse(string):
 	# Dictionary used to mark all of the tags
 	# Note that attributes are build each time that
 	# npc_print is called. Data could change, so it
@@ -32,20 +33,22 @@ func string_parse(strings):
 	var attributes_dictionary = {"npc_name": npc_reference.given_name,
 								"npc_occupation": npc_reference.occupation,
 								"npc_title": npc_reference.title,
-								"player_hp": player_reference.hp}
-								
+								"player_hp": player_reference.hp,
+								"char_delay": dialogue_panel.char_delay}
+	
 	# another important thing is evaluation clauses
 	# everything between two dollar signs("$_$") will by evaluated by eval() and pasted into string
 	# however, it is strongly recommended to use attributes. Use $$ only if you need something that is not in attributes dictionary
+	string = string.format(attributes_dictionary)
+	string = string.format(npc_vars)
 	
+	return string
+	
+func dialogue_parse(strings):
 	var formatted_strings = []
 	
 	for string in strings:
-		var formatted_str = string.format(attributes_dictionary) # parse any variables
-		# format evaluation clauses...
-		if(formatted_str.find('$') > -1): # but only if sting contains any dollar signs
-			formatted_str = build_evals(formatted_str)
-		formatted_strings.append(formatted_str)
+		formatted_strings.append(string_parse(string))
 	formatted_strings.append("!CLR") # clear screen after a print statement
 
 	dialogue_panel.dialogue_add(formatted_strings)
@@ -67,11 +70,19 @@ func parse(npc_ref, player_ref):
 	match(dialogue_file.open("res://Dialogues/" + npc_ref.npc_id + ".json",File.READ)):
 		OK:
 			var dialogue_string = dialogue_file.get_as_text()
+			dialogue_string = build_evals(dialogue_string)
 			dialogue_file.close()
 			var parse_result = JSON.parse(dialogue_string)
 			if(parse_result.error == OK):
 				print("JSON parsing done correctly!")
 				var dialogue_script = parse_result.result
+				if(dialogue_script.has("variables")):
+					npc_vars = dialogue_script["variables"]
+
+				# setting parameters
+				if(dialogue_script.has("parameters")):
+					if(dialogue_script["parameters"].has("char_delay")):
+						dialogue_panel.char_delay = dialogue_script["parameters"]["char_delay"]
 				script_stack = dialogue_script["stack"]
 			else:
 				print("Error parsing JSON.", parse_result.error_string, parse_result.error_line)
@@ -90,6 +101,7 @@ func _process(delta):
 # clear interpreter
 func finish():
 	script_stack = []
+	npc_vars = {}
 	self.set_process(false)
 	
 # add a substack onto main instruction stack. Used for if, choice and others like those
@@ -131,4 +143,4 @@ func _call(args):
 		# argument is an array of strings, pause in dialogue is inserted after each one
 		# after end of an statement, dialogue box is cleared
 		# technically, "!CLR" is appended at the end
-		string_parse(args["print"])
+		dialogue_parse(args["print"])

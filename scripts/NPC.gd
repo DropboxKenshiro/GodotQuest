@@ -1,7 +1,5 @@
 extends StaticBody2D
 
-class_name NPC
-
 # enum determining type of activation
 enum ActivationType {ACTIVATE_WALK_INTO, ACTIVATE_TRIGGER}
 # enum defining internal return types of parser
@@ -10,8 +8,6 @@ enum ActivationType {ACTIVATE_WALK_INTO, ACTIVATE_TRIGGER}
 var event_trigger # reference to collider that represents trigger area. If null, it's the default collider
 
 var input_wait_flag # flag that marks waiting for input during script parsing
-
-onready var dialogue_panel = $"../MainCamera/UI/DialoguePanel"
 
 var dialogue_script
 
@@ -23,9 +19,7 @@ export (Color) var npc_color # a colour that represents an NPC
 export (ActivationType) var activation_type # determines how event is activated
 
 func npc_event(player):
-	print("Parse start")
 	NpcParser.parse(self, player)
-	print("Parse end")
 
 func _ready():
 	pass
