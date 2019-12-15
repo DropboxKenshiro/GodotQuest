@@ -1,14 +1,16 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scripts/GameController.gd" type="Script" id=1]
-[ext_resource path="res://scripts/Hero.gd" type="Script" id=2]
-[ext_resource path="res://graphics/characters/hero_default.png" type="Texture" id=3]
-[ext_resource path="res://tilesets/default_x16.tres" type="TileSet" id=4]
-[ext_resource path="res://scripts/Main_Camera.gd" type="Script" id=5]
-[ext_resource path="res://scripts/DialoguePanel.gd" type="Script" id=6]
-[ext_resource path="res://fonts/Perfect DOS VGA 437/Perfect DOS VGA 437.tres" type="DynamicFont" id=7]
-[ext_resource path="res://scripts/NPC.gd" type="Script" id=8]
-[ext_resource path="res://graphics/characters/shopkeeper.png" type="Texture" id=9]
+[ext_resource path="res://graphics/16x16_speccy/16x16_speccy_tileset.tres" type="TileSet" id=2]
+[ext_resource path="res://scripts/Hero.gd" type="Script" id=3]
+[ext_resource path="res://graphics/16x16_speccy/characters/hero_default.png" type="Texture" id=4]
+[ext_resource path="res://scripts/NPC.gd" type="Script" id=5]
+[ext_resource path="res://graphics/16x16_speccy/characters/shopkeeper.png" type="Texture" id=6]
+[ext_resource path="res://graphics/16x16_speccy/objects/outdoors.png" type="Texture" id=7]
+[ext_resource path="res://scripts/Main_Camera.gd" type="Script" id=8]
+[ext_resource path="res://scripts/DialoguePanel.gd" type="Script" id=9]
+[ext_resource path="res://fonts/Roboto Mono/RobotoMono-Standard.tres" type="DynamicFont" id=10]
+[ext_resource path="res://scripts/SidePanel.gd" type="Script" id=11]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 1 )
@@ -21,19 +23,33 @@ bg_color = Color( 0, 0, 0, 1 )
 border_width_left = 8
 border_color = Color( 1, 1, 1, 1 )
 
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0, 0.109804, 1, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
 [node name="GameController" type="Node2D"]
 script = ExtResource( 1 )
+tileset = "16x16_speccy"
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 16, 16 )
+format = 1
+tile_data = PoolIntArray( 131087, 0, 1, 131088, 0, 1, 131089, 0, 2, 131090, 0, 1, 131091, 0, 2, 131092, 0, 1, 131093, 0, 1, 131094, 0, 1, 131095, 0, 1, 131096, 0, 2, 131097, 0, 1, 131098, 0, 1, 196623, 0, 1, 196624, 0, 65538, 196625, 0, 65538, 196626, 0, 65538, 196627, 0, 65538, 196628, 0, 131072, 196629, 0, 1, 196630, 0, 65537, 196631, 0, 65537, 196632, 0, 131075, 196633, 0, 131075, 196634, 0, 2, 262147, 1, 0, 262152, 1, 0, 262159, 0, 1, 262160, 0, 65538, 262161, 0, 65538, 262162, 0, 65538, 262163, 0, 65538, 262164, 0, 65538, 262165, 0, 131074, 262166, 0, 65537, 262167, 0, 65537, 262168, 0, 65537, 262169, 0, 65537, 262170, 0, 1, 327683, 1, 0, 327684, 1, 65536, 327685, 1, 65536, 327686, 1, 65536, 327687, 1, 65536, 327688, 1, 0, 327695, 0, 2, 327696, 0, 65538, 327697, 0, 65538, 327698, 0, 65538, 327699, 0, 65538, 327700, 0, 65538, 327701, 0, 1, 327702, 0, 65537, 327703, 0, 65539, 327704, 0, 65537, 327705, 0, 65537, 327706, 0, 1, 393219, 1, 0, 393220, 1, 0, 393221, 1, 0, 393222, 1, 0, 393223, 1, 0, 393224, 1, 0, 393231, 0, 1, 393232, 0, 65538, 393233, 0, 65538, 393234, 0, 65538, 393235, 0, 65538, 393236, 0, 65538, 393237, 0, 1, 393238, 0, 65537, 393239, 0, 65537, 393240, 0, 65537, 393241, 0, 65537, 393242, 0, 2, 458755, 1, 0, 458756, 1, 65536, 458757, 1, 65536, 458758, 1, 65536, 458759, 1, 65536, 458760, 1, 0, 458767, 0, 1, 458768, 0, 1, 458769, 0, 0, 458770, 0, 2, 458771, 0, 1, 458772, 0, 1, 458773, 0, 1, 458774, 0, 1, 458775, 0, 1, 458776, 0, 2, 458777, 0, 1, 458778, 0, 1, 524291, 1, 0, 524296, 1, 0, 524305, 1, 0, 524306, 1, 196608, 589840, 1, 0, 589841, 1, 0, 655376, 1, 0, 655378, 1, 0, 720914, 1, 0, 786449, 1, 0 )
 
 [node name="Hero" type="StaticBody2D" parent="." groups=[
 "Entity",
 ]]
-position = Vector2( 128, 80 )
+editor/display_folded = true
+position = Vector2( 192, 112 )
 z_index = 1
 collision_mask = 0
-script = ExtResource( 2 )
+script = ExtResource( 3 )
 __meta__ = {
 "_edit_group_": true
 }
+hero_name = "Patrick"
 
 [node name="Collider" type="CollisionPolygon2D" parent="Hero"]
 polygon = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
@@ -47,23 +63,71 @@ cast_to = Vector2( 16, 0 )
 position = Vector2( 8, 8 )
 
 [node name="Sprite" type="Sprite" parent="Hero"]
-texture = ExtResource( 3 )
+z_index = 1
+texture = ExtResource( 4 )
 centered = false
 
-[node name="TileMap" type="TileMap" parent="."]
-tile_set = ExtResource( 4 )
-cell_size = Vector2( 16, 16 )
-format = 1
-tile_data = PoolIntArray( 196620, 4, 0, 196621, 4, 0, 196622, 4, 0, 196623, 4, 0, 196624, 4, 0, 196625, 4, 0, 196626, 4, 0, 196627, 4, 0, 196628, 4, 0, 196629, 4, 0, 196630, 4, 0, 196631, 4, 0, 196632, 4, 0, 196633, 4, 0, 262156, 4, 0, 262157, 5, 0, 262158, 5, 0, 262159, 5, 0, 262160, 5, 0, 262161, 5, 0, 262162, 4, 0, 262163, 5, 0, 262164, 5, 0, 262165, 5, 0, 262166, 4, 0, 262167, 5, 0, 262168, 5, 0, 262169, 4, 0, 327692, 4, 0, 327693, 5, 0, 327694, 5, 0, 327695, 5, 0, 327696, 5, 0, 327697, 5, 0, 327698, 2, 0, 327699, 5, 0, 327700, 5, 0, 327701, 5, 0, 327702, 4, 0, 327703, 2, 0, 327704, 4, 0, 327705, 4, 0, 393228, 4, 0, 393229, 5, 0, 393230, 5, 0, 393231, 5, 0, 393232, 5, 0, 393233, 5, 0, 393234, 4, 0, 393235, 5, 0, 393236, 5, 0, 393237, 5, 0, 393238, 5, 0, 393239, 5, 0, 393240, 5, 0, 393241, 4, 0, 458764, 4, 0, 458765, 5, 0, 458766, 4, 0, 458767, 4, 0, 458768, 4, 0, 458769, 4, 0, 458770, 4, 0, 458771, 4, 0, 458772, 5, 0, 458773, 5, 0, 458774, 5, 0, 458775, 5, 0, 458776, 5, 0, 458777, 4, 0, 524291, 3, 1, 524292, 3, 65537, 524293, 3, 65537, 524294, 3, 65536, 524300, 4, 0, 524301, 5, 0, 524302, 4, 0, 524303, 0, 0, 524304, 0, 0, 524305, 0, 0, 524306, 0, 0, 524307, 4, 0, 524308, 5, 0, 524309, 5, 0, 524310, 5, 0, 524311, 5, 0, 524312, 5, 0, 524313, 4, 0, 589827, 1, 0, 589828, 1, 0, 589830, 1, 0, 589836, 4, 0, 589837, 2, 0, 589838, 4, 0, 589839, 0, 0, 589843, 4, 0, 589844, 5, 0, 589845, 5, 0, 589846, 5, 0, 589847, 5, 0, 589848, 5, 0, 589849, 4, 0, 655362, 1, 0, 655365, 1, 0, 655367, 1, 0, 655379, 4, 0, 655380, 4, 0, 655381, 4, 0, 655382, 4, 0, 655383, 4, 0, 655384, 4, 0, 655385, 4, 0, 720899, 1, 0, 720900, 1, 0, 720902, 1, 0, 720903, 1, 0, 786437, 1, 0, 851971, 1, 0 )
+[node name="Bob" type="StaticBody2D" parent="." groups=[
+"NPC",
+]]
+editor/display_folded = true
+position = Vector2( 272, 64 )
+collision_layer = 2
+collision_mask = 2
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_group_": true
+}
+given_name = "Bob"
+occupation = "Shopkeeper"
+npc_id = "shopkeeper"
+npc_color = Color( 0, 0.133333, 0.639216, 1 )
+
+[node name="Sprite" type="Sprite" parent="Bob"]
+z_index = 1
+texture = ExtResource( 6 )
+centered = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bob"]
+visible = false
+polygon = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
+
+[node name="RoadSign" type="StaticBody2D" parent="." groups=[
+"NPC",
+]]
+editor/display_folded = true
+position = Vector2( 160, 144 )
+collision_layer = 2
+collision_mask = 2
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_group_": true
+}
+given_name = "Sign"
+occupation = "sign"
+npc_id = "sign"
+npc_color = Color( 0.976471, 1, 0, 1 )
+
+[node name="Sprite" type="Sprite" parent="RoadSign"]
+z_index = 1
+texture = ExtResource( 7 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 32, 0, 16, 16 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RoadSign"]
+visible = false
+polygon = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
 
 [node name="MainCamera" type="Camera2D" parent="."]
 position = Vector2( 236, 106 )
+z_index = 10
 current = true
 drag_margin_left = 0.0
 drag_margin_top = 0.0
 drag_margin_right = 0.0
 drag_margin_bottom = 0.0
-script = ExtResource( 5 )
+script = ExtResource( 8 )
 zoom_table = [ 1.0, 0.5, 0.25 ]
 
 [node name="UI" type="Control" parent="MainCamera"]
@@ -85,15 +149,17 @@ margin_left = -640.0
 margin_top = 390.0
 margin_right = -108.0
 custom_styles/panel = SubResource( 1 )
-script = ExtResource( 6 )
+script = ExtResource( 9 )
 
 [node name="Dialogue" type="RichTextLabel" parent="MainCamera/UI/DialoguePanel"]
 margin_top = 8.0
 margin_right = 516.0
 margin_bottom = 90.0
-custom_fonts/normal_font = ExtResource( 7 )
+custom_fonts/normal_font = ExtResource( 10 )
 custom_constants/line_separation = 0
 bbcode_enabled = true
+bbcode_text = "mmmmmmm sweeet little font mmmmm"
+text = "mmmmmmm sweeet little font mmmmm"
 scroll_active = false
 
 [node name="ChoiceContainer" type="HSplitContainer" parent="MainCamera/UI/DialoguePanel"]
@@ -110,45 +176,62 @@ anchor_right = 1.0
 margin_left = 516.0
 margin_bottom = 480.0
 custom_styles/panel = SubResource( 2 )
+script = ExtResource( 11 )
+class_color_list = PoolColorArray( 0.847059, 0, 0, 1, 0, 0.207843, 1, 1 )
 
 [node name="Label" type="Label" parent="MainCamera/UI/SidePanel"]
 margin_left = 12.0
-margin_top = 6.0
 margin_right = 124.0
-margin_bottom = 44.0
-custom_fonts/font = ExtResource( 7 )
+margin_bottom = 38.0
+custom_fonts/font = ExtResource( 10 )
 custom_constants/line_spacing = 0
 text = "GODOT
 QUEST"
 align = 1
 valign = 1
 
-[node name="Bob" type="StaticBody2D" parent="." groups=[
-"NPC",
-]]
-position = Vector2( 208, 64 )
-collision_layer = 2
-collision_mask = 2
-script = ExtResource( 8 )
-__meta__ = {
-"_edit_group_": true
-}
-given_name = "Bob"
-occupation = "Shopkeeper"
-npc_id = "shopkeeper"
-npc_color = Color( 0, 0.168627, 0.670588, 1 )
+[node name="HeroClass" type="Label" parent="MainCamera/UI/SidePanel"]
+margin_left = 16.0
+margin_top = 54.0
+margin_right = 124.0
+margin_bottom = 70.0
+custom_fonts/font = ExtResource( 10 )
+text = "TESTIFICATE"
+valign = 1
 
-[node name="Sprite" type="Sprite" parent="Bob"]
-texture = ExtResource( 9 )
-centered = false
+[node name="Level" type="Label" parent="MainCamera/UI/SidePanel"]
+margin_left = 16.0
+margin_top = 70.0
+margin_right = 80.0
+margin_bottom = 86.0
+custom_fonts/font = ExtResource( 10 )
+text = "LVL000"
+valign = 1
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bob"]
-visible = false
-polygon = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
+[node name="ExpLabel" type="Label" parent="MainCamera/UI/SidePanel"]
+margin_left = 16.0
+margin_top = 86.0
+margin_right = 48.0
+margin_bottom = 105.0
+custom_fonts/font = ExtResource( 10 )
+text = "EXP"
+valign = 1
 
+[node name="ExpProgress" type="ProgressBar" parent="MainCamera/UI/SidePanel"]
+margin_left = 48.0
+margin_top = 89.0
+margin_right = 112.0
+margin_bottom = 105.0
+custom_styles/fg = SubResource( 3 )
+custom_styles/bg = SubResource( 4 )
+custom_fonts/font = ExtResource( 10 )
+value = 50.0
+percent_visible = false
 [connection signal="choice_change" from="Hero" to="MainCamera/UI/DialoguePanel" method="_on_Hero_choice_change"]
 [connection signal="dialogue_trigger" from="Hero" to="MainCamera/UI/DialoguePanel" method="_on_Hero_dialogue_trigger"]
 [connection signal="hero_moved" from="Hero" to="MainCamera" method="_on_Hero_hero_moved" binds= [ Vector2( 0, 0 ) ]]
+[connection signal="ready" from="Hero" to="MainCamera/UI/SidePanel" method="_on_Hero_ready"]
+[connection signal="ready" from="Bob" to="MainCamera/UI/SidePanel" method="_on_Bob_ready"]
 [connection signal="choice_begin" from="MainCamera/UI/DialoguePanel" to="Hero" method="_on_DialoguePanel_choice_begin"]
 [connection signal="choice_end" from="MainCamera/UI/DialoguePanel" to="Hero" method="_on_DialoguePanel_choice_end"]
 [connection signal="dialogue_begin" from="MainCamera/UI/DialoguePanel" to="Hero" method="_on_DialoguePanel_dialogue_begin"]

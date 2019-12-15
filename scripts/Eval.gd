@@ -5,7 +5,7 @@ func make_path(var_name, object):
 	#tree_path.erase(0,1) # trim the first slash
 	return ("\tvar " + var_name + "=get_node(\"" + tree_path + "\")\n") # e.g. "var Hero = /GameController/Hero"
 
-func eval(code_string, npc_reference, player_reference, references := []):
+func eval(code_string, npc_reference = null, player_reference = null, references := []):
 	var to_eval = GDScript.new()
 	to_eval.source_code += "extends Node\nfunc eval():\n"
 	

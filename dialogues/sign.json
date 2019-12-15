@@ -1,0 +1,14 @@
+{
+	"variables":
+	{
+		"dest_1": "Mordor",
+		"dest_2": "Lake",
+		"dist_1": "18 miles",
+		"dist_2": "9 miles"
+	},
+	"stack":
+	[
+		{"print": ["The sign says:"]},
+		{"print": ["\"{dest_1} {dist_1} away.\n{dest_2} {dist_2} away.\""]}
+	]
+}

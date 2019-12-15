@@ -4,7 +4,6 @@ extends Node2D
 #onready var Segment = preload("Segment.gd")
 
 onready var controller = $".."
-onready var glyph = $"Glyph"
 onready var ray = $"Ray"
 onready var collider = $"Collider"
 onready var camera = $"../MainCamera"
@@ -22,8 +21,13 @@ var position_changed = false # dirty flag to optimize position changing
 enum {INPUT_MOVE, INPUT_DIALOGUE, INPUT_CHOICE}
 var input_mode = self.INPUT_MOVE
 
+# hero statistics section
+enum CharacterClass {WARRIOR, MAGE}
+export (String) var hero_name
+export (CharacterClass) var hero_class
 var max_hp = 100
 var hp = 100
+var level = 1
 
 func set_internal_position(new_value):
 	internal_position = new_value
