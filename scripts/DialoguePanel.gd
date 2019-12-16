@@ -22,24 +22,27 @@ signal choice_end
 func _ready():
 	pass
 
-func enable_dialogue():
+func enable_dialogue(npc_ref):
 	emit_signal("dialogue_begin")
 	$"Dialogue".bbcode_text = ""
+	$"NpcNamePanel".get_node("Label").text = npc_ref.given_name
+	$"NpcNamePanel".get_node("Label").add_color_override("font_color",npc_ref.npc_color)
 	dialogue_state = STATE_TALK
 	self.show()
 
 func disable_dialogue():
 	self.hide()
 	$"Dialogue".bbcode_text = ""
+	$"NpcNamePanel".get_node("Label").text = ""
 	current_npc_reference = null
 	current_dialogue_array.clear()
 	emit_signal("dialogue_end")
 
-func dialogue_add(text: Array):
+func dialogue_add(text: Array, npc_ref):
 	var initialized = false
 	
 	if(current_dialogue_array.empty()):
-		enable_dialogue()
+		enable_dialogue(npc_ref)
 		initialized = true
 	for string in text:
 		current_dialogue_array.append(string)

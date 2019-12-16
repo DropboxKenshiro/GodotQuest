@@ -44,14 +44,14 @@ func string_parse(string):
 	
 	return string
 	
-func dialogue_parse(strings):
+func dialogue_parse(strings, npc_ref):
 	var formatted_strings = []
 	
 	for string in strings:
 		formatted_strings.append(string_parse(string))
 	formatted_strings.append("!CLR") # clear screen after a print statement
 
-	dialogue_panel.dialogue_add(formatted_strings)
+	dialogue_panel.dialogue_add(formatted_strings, npc_ref)
 
 func _ready():
 	self.set_process(false) # disable interpretation
@@ -143,4 +143,4 @@ func _call(args):
 		# argument is an array of strings, pause in dialogue is inserted after each one
 		# after end of an statement, dialogue box is cleared
 		# technically, "!CLR" is appended at the end
-		dialogue_parse(args["print"])
+		dialogue_parse(args["print"], npc_reference)
