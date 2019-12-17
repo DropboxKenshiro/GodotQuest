@@ -44,12 +44,13 @@ func string_parse(string):
 	
 	return string
 	
-func dialogue_parse(strings, npc_ref):
+func dialogue_parse(strings, npc_ref, add_clr = true):
 	var formatted_strings = []
 	
 	for string in strings:
 		formatted_strings.append(string_parse(string))
-	formatted_strings.append("!CLR") # clear screen after a print statement
+	if(add_clr):
+		formatted_strings.append("!CLR") # clear screen after a print statement
 
 	dialogue_panel.dialogue_add(formatted_strings, npc_ref)
 
@@ -137,10 +138,9 @@ func _call(args):
 		# TODO: this needed total rework.
 		pass
 	elif("print" in keys):
-		# what function called print can do?
-		# obviously, it prints text onto dialogue textbox
-		# form: {"print": [*string1*, ...]}
-		# argument is an array of strings, pause in dialogue is inserted after each one
-		# after end of an statement, dialogue box is cleared
-		# technically, "!CLR" is appended at the end
+		# works like print, but doesn't add "!CLR" at the end of string array
 		dialogue_parse(args["print"], npc_reference)
+	elif("print_noclr" in keys):
+		# works like print, but doesn't add "!CLR" at the end of string array
+		dialogue_parse(args["print_noclr"], npc_reference, false)
+		

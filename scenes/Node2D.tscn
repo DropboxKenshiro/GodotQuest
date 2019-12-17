@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scripts/GameController.gd" type="Script" id=1]
 [ext_resource path="res://graphics/16x16_speccy/16x16_speccy_tileset.tres" type="TileSet" id=2]
@@ -14,19 +14,24 @@
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 1 )
-border_width_top = 8
-border_width_right = 8
+border_width_top = 2
 border_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0, 0, 0, 1 )
-border_width_left = 8
+border_width_top = 2
+border_width_right = 2
 border_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0, 0, 0, 1 )
+border_width_left = 2
+border_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0, 0.109804, 1, 1 )
 
-[sub_resource type="StyleBoxEmpty" id=4]
+[sub_resource type="StyleBoxEmpty" id=5]
 
 [node name="GameController" type="Node2D"]
 script = ExtResource( 1 )
@@ -142,6 +147,7 @@ __meta__ = {
 }
 
 [node name="DialoguePanel" type="Panel" parent="MainCamera/UI"]
+visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -171,11 +177,23 @@ margin_top = -16.0
 margin_right = -4.0
 dragger_visibility = 1
 
+[node name="NpcNamePanel" type="Panel" parent="MainCamera/UI/DialoguePanel"]
+margin_top = -24.0
+margin_right = 94.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="Label" type="Label" parent="MainCamera/UI/DialoguePanel/NpcNamePanel"]
+margin_top = 2.0
+margin_right = 92.0
+margin_bottom = 24.0
+custom_fonts/font = ExtResource( 10 )
+valign = 1
+
 [node name="SidePanel" type="Panel" parent="MainCamera/UI"]
 anchor_right = 1.0
 margin_left = 516.0
 margin_bottom = 480.0
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 3 )
 script = ExtResource( 11 )
 class_color_list = PoolColorArray( 0.847059, 0, 0, 1, 0, 0.207843, 1, 1 )
 
@@ -222,8 +240,8 @@ margin_left = 48.0
 margin_top = 89.0
 margin_right = 112.0
 margin_bottom = 105.0
-custom_styles/fg = SubResource( 3 )
-custom_styles/bg = SubResource( 4 )
+custom_styles/fg = SubResource( 4 )
+custom_styles/bg = SubResource( 5 )
 custom_fonts/font = ExtResource( 10 )
 value = 50.0
 percent_visible = false
