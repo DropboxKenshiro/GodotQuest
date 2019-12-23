@@ -35,5 +35,35 @@ func eval(code_string, npc_reference = null, player_reference = null, references
 	
 	return value
 
+func exec(code_string, npc_reference = null, player_reference = null, references := []):
+	var to_eval = GDScript.new()
+	to_eval.source_code += "extends Node\nfunc exec():\n"
+	
+	if(npc_reference != null):
+		to_eval.source_code += make_path("NPC", npc_reference)
+	if(player_reference != null):
+		to_eval.source_code += make_path("Player", player_reference)
+	
+	if(!references.empty()):
+		for node in references:
+			to_eval.source_code += make_path(node.name, node)
+	
+	to_eval.source_code += "\t" + code_string
+	var check = to_eval.source_code
+	print(check)
+	to_eval.reload()
+	
+	var eval_obj = Node.new()
+	self.add_child(eval_obj, true)
+	$Node.set_script(to_eval)
+	print_tree_pretty()
+	
+	var value = eval_obj.exec()
+	
+	self.remove_child(eval_obj)
+	eval_obj.queue_free()
+	
+	return value
+
 func _ready():
 	pass

@@ -16,6 +16,7 @@ var current_npc_reference #reference do npc you're currently talking to.
 
 signal dialogue_begin
 signal choice_begin
+signal dialogue_next_block
 signal dialogue_end
 signal choice_end
 
@@ -58,22 +59,21 @@ func feed_dialogue():
 	
 	# this match instruction handles special codes
 	# they begin with '!' and do something special
+	var next_block = false
 	match current_dialogue_array.front():
 		"!CLR": # clears screen
 			$"Dialogue".bbcode_text = ""
 			current_dialogue_array.pop_front()
-			if(!current_dialogue_array.empty()):
-				continue
-			else:
-				disable_dialogue()
-				return
+			next_block = true
 		_: # no special code, add text to the textbox
-			# simple method of simulating slighty appearing text like in jRPGs
+			# simple method of simulating char-by-char appearing text like in jRPGs
+			print_flag = true
 			for character in current_dialogue_array.pop_front():
-				print_flag = true
 				yield(get_tree().create_timer(char_delay),"timeout")
-				print_flag = false
 				$"Dialogue".bbcode_text += character
+			print_flag = false
+	if(next_block):
+			emit_signal("dialogue_next_block")
 
 func enable_choices(possible):
 	emit_signal("choice_begin")

@@ -44,7 +44,7 @@ func string_parse(string):
 	
 	return string
 	
-func dialogue_parse(strings, npc_ref, add_clr = true):
+func dialogue_parse(strings: Array, npc_ref, add_clr = true):
 	var formatted_strings = []
 	
 	for string in strings:
@@ -91,13 +91,10 @@ func parse(npc_ref, player_ref):
 			print("No such NPC in database")
 			
 	self.set_process(true)
+	_call_sub(script_stack)
 		
 func _process(delta):
-	if(script_stack.size() != 0):
-		if(!wait_flag):
-			function_state = _call(script_stack.pop_front())
-	else:
-		finish()
+	pass
 
 # clear interpreter
 func finish():
@@ -105,14 +102,12 @@ func finish():
 	npc_vars = {}
 	self.set_process(false)
 	
-# add a substack onto main instruction stack. Used for if, choice and others like those
-func _add_sub(sub: Array):
-	 # we're reversing so instructions would be in correct order from top of the stack
-	var sub_i = sub
-	sub_i.invert()
-	
-	for instruction in sub_i:
-		script_stack.push_front(instruction)
+# call all instructions from a substack
+func _call_sub(sub: Array):
+	for instruction in sub:
+		_call(instruction)
+		yield(dialogue_panel, "dialogue_next_block")
+	dialogue_panel.disable_dialogue()
 
 func _call(args):
 	print(args)
@@ -121,15 +116,19 @@ func _call(args):
 		# null statement does nothing. It could have anything as a value.
 		# used for testing
 		pass
+	elif("exec" in keys):
+		# executes an expression using Eval singleton. Doesn't return a value.
+		Eval.exec(args["exec"], npc_reference, player_reference)
 	elif("if" in keys):
 		# conditional statement
 		# form: {"if": *condition*, "then": [*substack if true*], "else": [*substack if false*]}
 		# if "if" expression is true, "then" is executed, else "else" is executed
 		# notice that "if","then" and "else" are given as key-value pairs, not as array
 		if(Eval.eval(args["if"], npc_reference, player_reference)):
-			_add_sub(args["then"])
+			_call_sub(args["then"])
 		else:
-			_add_sub(args["else"])
+			_call_sub(args["else"])
+		pass
 	elif("choice" in keys):
 		# switch/case like instruction intended for dialogue branches
 		# choice is a block, consisting of:
@@ -138,9 +137,15 @@ func _call(args):
 		# TODO: this needed total rework.
 		pass
 	elif("print" in keys):
-		# works like print, but doesn't add "!CLR" at the end of string array
 		dialogue_parse(args["print"], npc_reference)
 	elif("print_noclr" in keys):
 		# works like print, but doesn't add "!CLR" at the end of string array
 		dialogue_parse(args["print_noclr"], npc_reference, false)
+	elif("while" in keys):
+		# standard while loop, adds substack until condition is met
+		# it works kinda diffrent than you may expect
+		# while add substack with another while if condition is true
+		# and doesn't add when is false
+		# TODO: rework
+		pass
 		
