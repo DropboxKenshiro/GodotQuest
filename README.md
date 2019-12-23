@@ -13,3 +13,4 @@ Game is in very early state, so building it is worthless. Sorry about that.
 # Licensing
 GodotQuest itself is licensed on MIT license. You can do nearly everything with the source code, if and only if you include reference to the original author (well, it's me). However, some components are licensed on diffrent rights:
 * Roboto Mono font is licensed on Apache License.
+* gdstats plugin for Godot(slick interpretation of diffrent prob. distributions RNG in GDScript) is licensed on MIT License. (C)droxmusic.
