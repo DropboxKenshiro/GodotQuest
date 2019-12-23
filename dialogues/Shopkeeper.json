@@ -1,11 +1,16 @@
 {
 	"parameters":
 	{
-		"char_delay": 0.03
+		"char_delay": 0.02
 	},
     "stack":[
-		{"print": ["Hey dude! ","What do you want?"]},
-		{"print": ["Two plus five is $2+5$."]},
-		{"print": ["I wait {char_delay} before I say a character."]}
+		{"print": ["New interpreting method testing..."]},
+		{
+			"if": "true",
+			"then": [
+				{"print": ["Kay, [color=yellow]KAYKAY![/color]"]}
+			],
+			"else": []
+		}
     ]
 }
