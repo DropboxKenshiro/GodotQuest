@@ -6,6 +6,7 @@ var wait_flag = false # flag that signalizes wait for an input(if any)
 var npc_reference
 var player_reference
 var npc_vars
+var depth_counter = 0
 
 var function_state # function reference for interpreting yields
 
@@ -100,14 +101,19 @@ func _process(delta):
 func finish():
 	script_stack = []
 	npc_vars = {}
+	dialogue_panel.disable_dialogue()
 	self.set_process(false)
 	
 # call all instructions from a substack
 func _call_sub(sub: Array):
+	depth_counter += 1
 	for instruction in sub:
-		_call(instruction)
-		yield(dialogue_panel, "dialogue_next_block")
-	dialogue_panel.disable_dialogue()
+		var yield_data = _call(instruction)
+		if(yield_data != null):
+			yield(yield_data["object"], yield_data["signal"])
+	depth_counter -= 1
+	if(depth_counter == 0):
+		self.finish()
 
 func _call(args):
 	print(args)
@@ -128,24 +134,25 @@ func _call(args):
 			_call_sub(args["then"])
 		else:
 			_call_sub(args["else"])
-		pass
-	elif("choice" in keys):
+	# elif("choice" in keys):
 		# switch/case like instruction intended for dialogue branches
 		# choice is a block, consisting of:
 		# "choice": [choices] -> array of strings that represent choices. Their names are also printed out in dialogue.
 		# keys of choices in previous key, values are sub-stacks
 		# TODO: this needed total rework.
-		pass
+		# pass
 	elif("print" in keys):
 		dialogue_parse(args["print"], npc_reference)
+		return {"object": dialogue_panel, "signal": "dialogue_next_block"}
 	elif("print_noclr" in keys):
 		# works like print, but doesn't add "!CLR" at the end of string array
 		dialogue_parse(args["print_noclr"], npc_reference, false)
-	elif("while" in keys):
+		return {"object": dialogue_panel, "signal": "dialogue_next_block"}
+	# elif("while" in keys):
 		# standard while loop, adds substack until condition is met
 		# it works kinda diffrent than you may expect
 		# while add substack with another while if condition is true
 		# and doesn't add when is false
 		# TODO: rework
-		pass
+		# pass
 		
